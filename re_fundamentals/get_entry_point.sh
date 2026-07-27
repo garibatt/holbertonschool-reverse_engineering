@@ -20,14 +20,11 @@ if ! readelf -h "$file_name" > /dev/null 2>&1; then
     exit 1
 fi
 
-# 4. Məlumatların çıxarılması
-magic_number=$(readelf -h "$file_name" | grep "Magic:" | sed 's/.*Magic:[ \t]*//')
-class=$(readelf -h "$file_name" | grep "Class:" | sed 's/.*Class:[ \t]*//')
-
-# DÜZƏLİŞ EDİLMİŞ SƏTİR: Vergüldən sonrakı hissəni (little endian / big endian) götürür
-byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/.*, //')
-
-entry_point_address=$(readelf -h "$file_name" | grep "Entry point address:" | sed 's/.*Entry point address:[ \t]*//')
+# 4. Məlumatların çıxarılması və xargs ilə boşluqların təmizlənməsi
+magic_number=$(readelf -h "$file_name" | grep "Magic:" | sed 's/.*Magic://' | xargs)
+class=$(readelf -h "$file_name" | grep "Class:" | sed 's/.*Class://' | xargs)
+byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/.*, //' | xargs)
+entry_point_address=$(readelf -h "$file_name" | grep "Entry point address:" | sed 's/.*Entry point address://' | xargs)
 
 # 5. Mesaj formatının tətbiqi
 source ./messages.sh
