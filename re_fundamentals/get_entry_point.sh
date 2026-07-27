@@ -23,7 +23,10 @@ fi
 # 4. Məlumatların çıxarılması
 magic_number=$(readelf -h "$file_name" | grep "Magic:" | sed 's/.*Magic:[ \t]*//')
 class=$(readelf -h "$file_name" | grep "Class:" | sed 's/.*Class:[ \t]*//')
-byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/.*Data:[ \t]*//')
+
+# DÜZƏLİŞ EDİLMİŞ SƏTİR: Vergüldən sonrakı hissəni (little endian / big endian) götürür
+byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/.*, //')
+
 entry_point_address=$(readelf -h "$file_name" | grep "Entry point address:" | sed 's/.*Entry point address:[ \t]*//')
 
 # 5. Mesaj formatının tətbiqi
